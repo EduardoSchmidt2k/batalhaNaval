@@ -15,8 +15,9 @@ public class PlayerHandler implements Runnable {
     String roomId;
     private final Map<String, BattleRoom> battleRooms;
     private final String NO_ROOM = "no_room";
-    String commands =
-            "/join: Join a room (if the game is not started)\n" +
+    String commands ="Commands available only when the game is not started\n" +
+                    "-----------------------------------------------------------\n" +
+                    "/join: Join a room (if the game is not started)\n" +
                     "/leave: Leave the current room (if the game is not started)\n" +
                     "/list: List available rooms (if the game is not started)\n" +
                     "/create: Create a new room (if the game is not started)\n" +
@@ -25,6 +26,9 @@ public class PlayerHandler implements Runnable {
                     "/checkReady: Check if the player is ready (if the game is not started)\n" +
                     "/uncheckReady: Uncheck the player's readiness (if the game is not started)\n" +
                     "/startGame: Start the game (if the game is not started)\n" +
+                    "-----------------------------------------------------------\n" +
+                    "Commands available only when the game is running\n" +
+                    "-----------------------------------------------------------\n" +
                     "/showBoard: Display the game board\n" +
                     "/fire: Perform a firing action\n" +
                     "/checkEnemyBoard: Check the enemy's game board\n" +
@@ -127,7 +131,7 @@ public class PlayerHandler implements Runnable {
     }
 
     private void checkGameStatus() {
-        battleRooms.get(roomId).checkGameStatus(playerCode);
+        out.println(battleRooms.get(roomId).checkGameStatus(playerCode));
     }
 
     private void checkEnemyBoard() {
@@ -163,17 +167,17 @@ public class PlayerHandler implements Runnable {
 
     private void startGame(){
         if (battleRooms.get(roomId).canStartGame()) {
-            isGameStarted = true;
-            sendMessage("The game has begun, get ready!");
+            battleRooms.get(roomId).startGame(playerCode);
         } else {
             out.println("The two players aren't ready yet.");
         }
     }
 
     private void placeShips(){
-        int shipsLeft = 1;
+        int shipsLeft = 8;
+        battleRooms.get(roomId).clearBoard(playerCode);
         showBoard();
-        out.println("Example of writing a position: 4,3 - the available numbers is 0~4,0~9");
+        out.println("Example of writing a position: 0,1 - the available numbers is 0~3,0~7");
         out.println("The first number is the row and the second the column");
         while (shipsLeft > 0){
             out.println("Where do you want to put your ship?");

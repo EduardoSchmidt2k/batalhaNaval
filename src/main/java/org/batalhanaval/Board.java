@@ -3,7 +3,7 @@ package org.batalhanaval;
 import java.util.Arrays;
 
 public class Board {
-    char[][] board = new char[5][10];
+    char[][] board = new char[4][8];
 
     public void initializeBoard() {
         for (char[] chars : board) {
@@ -67,7 +67,7 @@ public class Board {
     }
 
     private boolean isPositionValid(int row, int column){
-        return (row < 5 && row >= 0) && (column < 10 && column >= 0);
+        return (row < 4 && row >= 0) && (column < 8 && column >= 0);
     }
 
 

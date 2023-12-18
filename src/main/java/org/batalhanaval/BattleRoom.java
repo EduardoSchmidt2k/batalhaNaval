@@ -41,6 +41,10 @@ public class BattleRoom {
         return boards.get(playerCode).placeShip(Integer.parseInt(row),Integer.parseInt(col));
     }
 
+    public void clearBoard(String playerCode){
+        boards.get(playerCode).initializeBoard();
+    }
+
     public boolean isRoomFull(){
         return players.size() == 2;
     }
@@ -55,12 +59,14 @@ public class BattleRoom {
                players.get(playerCode).out.println(checkEnemyBoard(playerCode));
                players.get(getEnemyCode(playerCode)).out.println(showBoard(getEnemyCode(playerCode)));
                broadcastMessage("Player "+playerCode+" hit a ship!");
+               players.get(getEnemyCode(playerCode)).out.println("It's your turn, type /fire to start shooting!");
            } else if (result.equals("Miss")) {
                playersStatus.get(getEnemyCode(playerCode)).isMyTurn = true;
                playersStatus.get(playerCode).isMyTurn = false;
                players.get(playerCode).out.println(checkEnemyBoard(playerCode));
                players.get(getEnemyCode(playerCode)).out.println(showBoard(getEnemyCode(playerCode)));
                broadcastMessage("Player "+playerCode+" missed a ship!");
+               players.get(getEnemyCode(playerCode)).out.println("It's your turn, type /fire to start shooting!");
            } else{
                 players.get(playerCode).out.println("Something is gone wrong, write again /fire!");
            }
@@ -108,8 +114,15 @@ public class BattleRoom {
         else{
             everyoneIsReady = false;
         }
-        broadcastMessage(everyoneIsReady+"");
         return everyoneIsReady;
+    }
+
+    public void startGame(String playerCode){
+        players.get(playerCode).isGameStarted = true;
+        players.get(getEnemyCode(playerCode)).isGameStarted = true;
+        playersStatus.get(getEnemyCode(playerCode)).isMyTurn = false;
+        players.get(playerCode).out.println("It's your time, write /fire to take the enemy ship down!");
+        players.get(getEnemyCode(playerCode)).out.println("It's the opponent turn, when he shot, you will see the message and the board, then its your turn!");
     }
 
     public String getEnemyCode(String playerCode){
@@ -130,8 +143,8 @@ public class BattleRoom {
     }
 
     public String checkGameStatus(String playerCode){
-        return "My status: "+playersStatus.get(playerCode).toString()+"\n" +
-                "Enemy Status: "+playersStatus.get(getEnemyCode(playerCode)).toString();
+        return "My ships left: "+playersStatus.get(playerCode).shipsCount+"\n" +
+                "Enemy ships left: "+playersStatus.get(getEnemyCode(playerCode)).shipsCount;
     }
 
 }

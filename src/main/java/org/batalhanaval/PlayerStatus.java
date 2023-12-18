@@ -8,7 +8,7 @@ public class PlayerStatus {
     public PlayerStatus(boolean isMyTurn, boolean isReady) {
         this.isMyTurn = isMyTurn;
         this.isReady = isReady;
-        this.shipsCount = 1;
+        this.shipsCount = 8;
     }
 
     @Override
